@@ -1,10 +1,21 @@
+#!/usr/bin/env python
 # coding: utf-8
 
+import os
 from os import environ
-
-SECRET_KEY='aaaaaaaaaaaaa'
-
 debug = True
+template_path = os.path.join(os.path.dirname("__file__"), "templates")
+static_path = os.path.join(os.path.dirname("__file__"), "static")
+xsrf_cookies = True
+login_url = "/login"
+cookie_secret = "dskfhisdjklagkfdklag;lkjasdklgjkldsjaklgjkldsfksdklf"
+autoescape = None
+##template_loader=utils.ZipLoader
+gzip=True
+static_url_prefix = "/static/"
+##static_handler_class = MyStaticFileHandler
+##static_handler_args = { "key1":"value1", "key2":"value2"  }
+##log_function = your_fun
 
 DBINFO = {
     'product':{
@@ -23,13 +34,11 @@ DBINFO = {
     }
 }
 
-
 if debug:
     dbenv = "develop"
 else:
     dbenv = "product"
 
 db_config = 'mysql+mysqldb://%s:%s@%s:%s/%s?charset=utf8' % (DBINFO[dbenv]['db_user'], DBINFO[dbenv]['db_passwd'], DBINFO[dbenv]['db_host'], DBINFO[dbenv]['db_port'], DBINFO[dbenv]['db_name'])
-print db_config
-# cookie加密的密钥
-cookie_secret = 'test' if debug else SECRET_KEY
+
+SECRET_KEY='aaaaaaaaaaaaa'

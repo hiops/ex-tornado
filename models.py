@@ -12,6 +12,7 @@ from datetime import datetime
 
 from settings import db_config
 
+#engine = create_engine(db_config, pool_recycle=5, poolclass=NullPool)
 engine = create_engine(db_config, pool_recycle=5, poolclass=NullPool)
 
 DB_Session = sessionmaker(bind=engine)

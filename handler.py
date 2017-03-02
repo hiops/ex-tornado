@@ -5,7 +5,7 @@ import logging
 import tornado.web
 import tornado.escape
 
-from models import DB_Session
+from models import DB_Session,User
 
 
 RES_CODE_SUCCESS = 0
@@ -65,10 +65,14 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class TestHandler(BaseHandler):
     def get(self):
-        # 业务逻辑
         self.write('hello world')
 class GetUserByIdHandler(BaseHandler):
     def get(self,user_id):
         db = DB_Session() 
-        user = db.query.filter(User.user_id == user_id).all()
-        self.write(user[0]._dict_)
+        user = db.query(User).filter(User.user_id==user_id).all()
+        self.write(user[0].username)
+
+urls=[
+    (r'/test',TestHandler),
+    (r'/user/([0-9]+)',GetUserByIdHandler),
+]

@@ -48,8 +48,14 @@ def init_data():
     )
     ins = db.add(user)
     print ins
-    sess.commit()
+    db.commit()
+def test_data():
+    db = DB_Session()
+    user = db.query(User).filter(User.user_id==12345).all()
+    print user[0].__dict__
+    print user[0].username
 
 if __name__ == '__main__':
     #init_db()
-    init_data()
+    #init_data()
+    test_data()

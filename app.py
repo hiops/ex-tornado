@@ -16,6 +16,7 @@ metadata = dict(
 
 urls = [
     (r'/test', TestHandler),
+    (r'/user/[0-9]+', GetUserByIdHandler),
 ]
 
 

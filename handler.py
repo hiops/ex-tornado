@@ -67,3 +67,8 @@ class TestHandler(BaseHandler):
     def get(self):
         # 业务逻辑
         self.write('hello world')
+class GetUserByIdHandler(BaseHandler):
+    def get(self,user_id):
+        db = DB_Session() 
+        user = db.query.filter(User.user_id == user_id).all()
+        self.write(user[0]._dict_)

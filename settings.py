@@ -44,6 +44,22 @@ SESSION_OPTIONS = {
     }
 }
 
+LDAP = {
+    "ldap_host": "10.1.1.1",
+    "ldap_port": 389,
+    "ldap_usessl": False,
+    "ldap_basedn": "OU=部,OU=公司,OU=ROOT,DC=ops,DC=com",
+    "ldap_userbase": "OU=部,OU=公司,OU=ROOT,DC=ops,DC=com",
+    "ldap_userdn": "%s",
+    "ldap_attributeusername": "userPrincipalName",
+    "ldap_attributename": "cn",
+    "ldap_attributesurname": "givenName",
+    "ldap_attributemail": "userPrincipalName",
+    "ldap_filter": "(userPrincipalName=%s)",
+    "ldap_msadsaformat": "",
+    "ldap_enabled": True
+}
+
 if debug:
     dbenv = "develop"
 else:

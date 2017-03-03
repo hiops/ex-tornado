@@ -5,16 +5,11 @@ import os
 import tornado.web
 from tornado.options import define, options
 import settings
+from settings import SESSION_OPTIONS
 
 from handler import *
 
-def app():
-    #setting = {
-    #    'cookie_secret': 'D8888888888kasdfFKwlwfsdfsa1204mx',
-    #    'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
-    #    'static_path': os.path.join(os.path.dirname(__file__), 'static'),
-    #    'debug': True,
-    #}
+def make_app():
     setting = options.as_dict()
     tapp = tornado.web.Application(
         handlers=[
@@ -23,4 +18,5 @@ def app():
             #('.*', tornado.web.FallbackHandler, dict(fallback=container)),
         ], **setting)
     tapp.add_handlers(".*$",urls)
+    tapp.session_manager = session.SessionManager(SESSION_OPTIONS["session_secret"], SESSION_OPTIONS["session_store"], SESSION_OPTIONS["session_timeout"])
     return tapp

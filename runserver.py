@@ -23,7 +23,7 @@ tornado.options.parse_config_file(config_file)
 print options.as_dict()
 
 def main():
-    tornado_app = app.app()
+    tornado_app = app.make_app()
 
     server = tornado.httpserver.HTTPServer(tornado_app)
     server.listen(options.port, options.host)

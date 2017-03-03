@@ -34,6 +34,16 @@ DBINFO = {
     }
 }
 
+SESSION_OPTIONS = {
+    "session_secret" : "3cdcb1f00803b6e78ab50b466a40b9977db396840c28307f428b25e2277f1bcc",
+    "session_timeout" : 60,
+    "session_store" : {
+        'redis_host': 'localhost',
+        'redis_port': 6379,
+        'redis_pass': '',
+    }
+}
+
 if debug:
     dbenv = "develop"
 else:

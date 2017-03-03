@@ -5,6 +5,8 @@ import logging
 import tornado.web
 import tornado.escape
 
+import session
+
 from models import DB_Session,User
 
 
@@ -54,16 +56,15 @@ def handle_exception(func):
 
     return wrapper
 
-
 class BaseHandler(tornado.web.RequestHandler):
-    def initialize(self):
+    def __init__(self, *argc, **argkw):
+        super(BaseHandler, self).__init__(*argc, **argkw)
         self.dbsession = DB_Session()
-
+        self.session = session.Session(self.application.session_manager, self)
+    def get_current_user(self):
+        return self.session.get("username")
     def on_finish(self):
         self.dbsession.close()
-
-    def get_current_user(self):
-        return self.get_secure_cookie("username")
 
 
 class TestHandler(BaseHandler):
@@ -85,7 +86,10 @@ class LoginHandler(BaseHandler):
         user = self.dbsession.query(User).filter(User.username==username).first()
         if user != None and user.check_password_hash(password):
             print user.password
-            self.set_secure_cookie("username", self.get_argument("username"))
+            self.session["username"] = user.username
+            self.session["user_id"] = user.user_id
+            self.session.save()
+            #self.set_secure_cookie("username", self.get_argument("username"))
             self.redirect("/")
         else:
             self.write("username or password error !")
@@ -93,12 +97,13 @@ class LoginHandler(BaseHandler):
 class WelcomeHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
+        print "current_user: {0}".format(self.current_user)
         self.render('index.html', user=self.current_user)
 
 class LogoutHandler(BaseHandler):
     def get(self):
         if (self.get_argument("logout", None)):
-            self.clear_cookie("username")
+            self.session["username"] = None
             self.redirect("/")
 
 

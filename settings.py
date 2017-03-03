@@ -39,6 +39,7 @@ if debug:
 else:
     dbenv = "product"
 
-db_config = 'mysql+mysqldb://%s:%s@%s:%s/%s?charset=utf8' % (DBINFO[dbenv]['db_user'], DBINFO[dbenv]['db_passwd'], DBINFO[dbenv]['db_host'], DBINFO[dbenv]['db_port'], DBINFO[dbenv]['db_name'])
+DB_CONFIG = 'mysql+mysqldb://%s:%s@%s:%s/%s?charset=utf8' % (DBINFO[dbenv]['db_user'], DBINFO[dbenv]['db_passwd'], DBINFO[dbenv]['db_host'], DBINFO[dbenv]['db_port'], DBINFO[dbenv]['db_name'])
 
 SECRET_KEY='aaaaaaaaaaaaa'
+PASSWD_SALT='sec string'

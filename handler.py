@@ -57,10 +57,13 @@ def handle_exception(func):
 
 class BaseHandler(tornado.web.RequestHandler):
     def initialize(self):
-        self.session = DB_Session()
+        self.dbsession = DB_Session()
 
     def on_finish(self):
-        self.session.close()
+        self.dbsession.close()
+
+    def get_current_user(self):
+        return self.get_secure_cookie("username")
 
 
 class TestHandler(BaseHandler):
@@ -68,11 +71,41 @@ class TestHandler(BaseHandler):
         self.write('hello world')
 class GetUserByIdHandler(BaseHandler):
     def get(self,user_id):
-        db = DB_Session() 
-        user = db.query(User).filter(User.user_id==user_id).all()
+        user = self.dbsession.query(User).filter(User.user_id==user_id).all()
         self.write(user[0].username)
 
+
+class LoginHandler(BaseHandler):
+    def get(self):
+        self.render('login.html')
+
+    def post(self):
+        username = self.get_argument("username")
+        password = self.get_argument("password")
+        user = self.dbsession.query(User).filter(User.username==username).first()
+        if user != None and user.check_password_hash(password):
+            print user.password
+            self.set_secure_cookie("username", self.get_argument("username"))
+            self.redirect("/")
+        else:
+            self.write("username or password error !")
+
+class WelcomeHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render('index.html', user=self.current_user)
+
+class LogoutHandler(BaseHandler):
+    def get(self):
+        if (self.get_argument("logout", None)):
+            self.clear_cookie("username")
+            self.redirect("/")
+
+
 urls=[
+    (r'/', WelcomeHandler),
+    (r'/login', LoginHandler),
+    (r'/logout', LogoutHandler),
     (r'/test',TestHandler),
     (r'/user/([0-9]+)',GetUserByIdHandler),
 ]

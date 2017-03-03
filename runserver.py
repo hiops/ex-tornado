@@ -13,6 +13,8 @@ define('host', default="0.0.0.0", help='host', type=str)
 define('static_path', default=None, help='static_path', type=str)
 define('template_path', default=None, help='template_path', type=str)
 define('cookie_secret', default=None, help='cookie_secret', type=str)
+define('login_url', default=None, help='login_url', type=str)
+define('xsrf_cookies', default=None, help='xsrf_cookies', type=bool)
 define('debug', default=True, help='debug level', type=bool)
 options.parse_command_line()
 
